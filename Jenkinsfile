@@ -4,12 +4,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'mvn clean package'
+                bat 'mvn clean package'
             }
         }
         stage('Test') {
             steps {
-                sh 'mvn test'
+                bat 'mvn test'
             }
             post {
                 success {
@@ -26,12 +26,12 @@ pipeline {
         }
         stage('Code Analysis') {
             steps {
-                sh 'mvn sonar:sonar'
+                bat 'mvn sonar:sonar'
             }
         }
         stage('Security Scan') {
             steps {
-                sh 'dependency-check.sh --project Github integration -e --scan ./'
+                bat 'dependency-check.bat --project "Github integration -e" --scan ./'
             }
             post {
                 success {
@@ -48,17 +48,17 @@ pipeline {
         }
         stage('Deploy to Staging') {
             steps {
-                sh 'scp target/my-app.jar cyber-elvis@staging-server-address:/actual/path/to/deploy/'
+                bat 'scp target\\my-app.jar cyber-elvis@staging-server-address:/actual/path/to/deploy/'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                sh 'mvn verify -Denv=staging'
+                bat 'mvn verify -Denv=staging'
             }
         }
         stage('Deploy to Production') {
             steps {
-                sh 'scp target/my-app.jar cyber-elvis@production-server-address:/actual/path/to/deploy/'
+                bat 'scp target\\my-app.jar cyber-elvis@production-server-address:/actual/path/to/deploy/'
             }
         }
     }
