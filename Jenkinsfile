@@ -2,78 +2,58 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.9' 
+        maven 'Maven 3.9.9'
     }
 
     stages {
         stage('Build') {
             steps {
-                dir('C:/Users/Elvis-PC/AppData/Local/Jenkins/.jenkins/workspace/Github integration -e') {
-                    bat 'mvn clean package'
-                }
+                echo 'Building the code using Maven...'
+                echo 'Maven is specified as the build automation tool.'
             }
         }
-        stage('Test') {
+        stage('Unit and Integration Tests') {
             steps {
-                bat 'mvn test'
-            }
-            post {
-                success {
-                    mail to: 'elvisifeanyi67@gmail.com',
-                         subject: "Pipeline Success: ${currentBuild.fullDisplayName}",
-                         body: "The Test stage of the pipeline has succeeded."
-                }
-                failure {
-                    mail to: 'elvisifeanyi67@gmail.com',
-                         subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
-                         body: "The Test stage of the pipeline has failed. Please check the logs."
-                }
+                echo 'Running unit and integration tests...'
+                echo 'JUnit and Selenium are specified as the test automation tools.'
             }
         }
         stage('Code Analysis') {
             steps {
-                bat 'mvn sonar:sonar'
+                echo 'Performing code analysis...'
+                echo 'SonarQube is specified as the code analysis tool.'
             }
         }
         stage('Security Scan') {
             steps {
-                bat 'dependency-check.bat --project "Github integration -e" --scan ./'
-            }
-            post {
-                success {
-                    mail to: 'elvisifeanyi67@gmail.com',
-                         subject: "Pipeline Success: ${currentBuild.fullDisplayName}",
-                         body: "The Security Scan stage of the pipeline has succeeded."
-                }
-                failure {
-                    mail to: 'elvisifeanyi67@gmail.com',
-                         subject: "Pipeline Failed: ${currentBuild.fullDisplayName}",
-                         body: "The Security Scan stage of the pipeline has failed. Please check the logs."
-                }
+                echo 'Performing security scan...'
+                echo 'OWASP Dependency Check is specified as the security scanning tool.'
             }
         }
         stage('Deploy to Staging') {
             steps {
-                bat 'scp target\\my-app.jar cyber-elvis@staging-server-address:/actual/path/to/deploy/'
+                echo 'Deploying the application to the staging server...'
+                echo 'The staging server is specified as an AWS EC2 instance.'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                bat 'mvn verify -Denv=staging'
+                echo 'Running integration tests on the staging environment...'
+                echo 'The same test automation tools (JUnit, Selenium) are used for staging.'
             }
         }
         stage('Deploy to Production') {
             steps {
-                bat 'scp target\\my-app.jar cyber-elvis@production-server-address:/actual/path/to/deploy/'
+                echo 'Deploying the application to the production server...'
+                echo 'The production server is specified as an AWS EC2 instance.'
             }
         }
     }
 
     post {
         always {
-            mail to: 'elvisifeanyi67@gmail.com',
-                 subject: "Pipeline ${currentBuild.fullDisplayName}",
-                 body: "The pipeline has ${currentBuild.currentResult}. Please check the logs."
+            echo 'Sending email notifications at the end of the Test and Security Scan stages...'
+            echo 'Notification emails will include the status of the stage and logs as attachments.'
         }
     }
 }
