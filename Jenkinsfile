@@ -5,12 +5,14 @@ pipeline {
         maven 'Maven 3.9.9' 
     }
 
-    stage('Build') {
-    steps {
-        dir('C:/Users/Elvis-PC/AppData/Local/Jenkins/.jenkins/workspace/Github integration -e') {
-            sh 'mvn clean package'
+    stages {
+        stage('Build') {
+            steps {
+                dir('C:/Users/Elvis-PC/AppData/Local/Jenkins/.jenkins/workspace/Github integration -e') {
+                    sh 'mvn clean package'
+                }
+            }
         }
-    }
         stage('Test') {
             steps {
                 bat 'mvn test'
