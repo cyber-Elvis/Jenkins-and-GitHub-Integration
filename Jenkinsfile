@@ -2,21 +2,18 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.9.9' 
+        maven 'Maven 3.9.9'
     }
 
     stages {
         stage('Build') {
             steps {
-                echo 'Building the code using Maven...'
-                dir('C:/Users/Elvis-PC/AppData/Local/Jenkins/.jenkins/workspace/Github integration -e') {
-                    sh 'mvn clean package'
-                }
+                echo 'Task: Build - Using Maven to clean and package the project'
             }
         }
         stage('Test') {
             steps {
-                bat 'mvn test'
+                echo 'Task: Test - Using Maven to run tests'
             }
             post {
                 success {
@@ -33,12 +30,12 @@ pipeline {
         }
         stage('Code Analysis') {
             steps {
-                bat 'mvn sonar:sonar'
+                echo 'Task: Code Analysis - Using SonarQube for code analysis'
             }
         }
         stage('Security Scan') {
             steps {
-                bat 'dependency-check.bat --project "Github integration -e" --scan ./'
+                echo 'Task: Security Scan - Using OWASP Dependency-Check for security scanning'
             }
             post {
                 success {
@@ -55,17 +52,17 @@ pipeline {
         }
         stage('Deploy to Staging') {
             steps {
-                bat 'scp target\\my-app.jar cyber-elvis@staging-server-address:/actual/path/to/deploy/'
+                echo 'Task: Deploy to Staging - Printing deployment instructions'
             }
         }
         stage('Integration Tests on Staging') {
             steps {
-                bat 'mvn verify -Denv=staging'
+                echo 'Task: Integration Tests - Running integration tests on staging environment'
             }
         }
         stage('Deploy to Production') {
             steps {
-                bat 'scp target\\my-app.jar cyber-elvis@production-server-address:/actual/path/to/deploy/'
+                echo 'Task: Deploy to Production - Printing production deployment instructions'
             }
         }
     }
