@@ -7,7 +7,7 @@ pipeline {
 
     stage('Build') {
     steps {
-        dir('C:\Users\Elvis-PC\AppData\Local\Jenkins\.jenkins\workspace\Github integration -e') {
+        dir('C:/Users/Elvis-PC/AppData/Local/Jenkins/.jenkins/workspace/Github integration -e') {
             sh 'mvn clean package'
         }
     }
